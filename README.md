@@ -4,6 +4,8 @@
 
 A VS Code extension that displays inline color previews for MonoGame/XNA `Color` constructors in C# files.
 
+Get it from Open VSX: https://open-vsx.org/extension/csharp-forge/monogame-color-preview
+
 ## Features
 
 - **RGB Constructor Detection**: Recognizes `new Color(r, g, b)` and `new Color(r, g, b, a)` patterns
