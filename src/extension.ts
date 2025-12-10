@@ -179,17 +179,40 @@ interface NearestColorResult {
   distance: number;
 }
 
+/**
+ * Convert RGB component values to a hex color string.
+ * @param r Red channel (0-255).
+ * @param g Green channel (0-255).
+ * @param b Blue channel (0-255).
+ * @returns Hex string in the format #rrggbb.
+ */
 function rgbToHex(r: number, g: number, b: number): string {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
+/**
+ * Pick a contrasting text color for the given RGB background.
+ * @param r Red channel (0-255).
+ * @param g Green channel (0-255).
+ * @param b Blue channel (0-255).
+ * @returns '#000000' or '#ffffff' depending on luminance.
+ */
 function getContrastColor(r: number, g: number, b: number): string {
   // Calculate relative luminance
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   return luminance > 0.5 ? '#000000' : '#ffffff';
 }
 
-// Calculate Euclidean distance between two colors in RGB space
+/**
+ * Calculate Euclidean distance between two RGB colors.
+ * @param r1 First color red channel.
+ * @param g1 First color green channel.
+ * @param b1 First color blue channel.
+ * @param r2 Second color red channel.
+ * @param g2 Second color green channel.
+ * @param b2 Second color blue channel.
+ * @returns Euclidean distance between the two colors.
+ */
 function colorDistance(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number): number {
   return Math.sqrt(
     Math.pow(r1 - r2, 2) +
@@ -198,7 +221,14 @@ function colorDistance(r1: number, g1: number, b1: number, r2: number, g2: numbe
   );
 }
 
-// Find the nearest named colors to the given RGB values
+/**
+ * Find the nearest MonoGame named colors to the provided RGB values.
+ * @param r Red channel (0-255).
+ * @param g Green channel (0-255).
+ * @param b Blue channel (0-255).
+ * @param count Maximum number of nearest colors to return.
+ * @returns Sorted list of nearest colors with distance metadata.
+ */
 function findNearestColors(r: number, g: number, b: number, count: number = 3): NearestColorResult[] {
   const results: NearestColorResult[] = [];
 
@@ -217,6 +247,11 @@ function findNearestColors(r: number, g: number, b: number, count: number = 3): 
   return results.slice(0, count);
 }
 
+/**
+ * Scan a document for MonoGame/XNA color usages and return their parsed values.
+ * @param document Target text document.
+ * @returns Collection of color matches with ranges and RGB values.
+ */
 function findColorMatches(document: vscode.TextDocument): ColorMatch[] {
   const text = document.getText();
   const matches: ColorMatch[] = [];
@@ -271,13 +306,21 @@ function findColorMatches(document: vscode.TextDocument): ColorMatch[] {
   return matches;
 }
 
-// Code Action Provider for suggesting named color replacements
+/**
+ * Code Action Provider that suggests MonoGame named color replacements.
+ */
 class MonoGameColorCodeActionProvider implements vscode.CodeActionProvider {
   public static readonly providedCodeActionKinds = [
     vscode.CodeActionKind.QuickFix,
     vscode.CodeActionKind.Refactor,
   ];
 
+  /**
+   * Provide replacement suggestions for `new Color(...)` usages near the cursor.
+   * @param document Active document.
+   * @param range Selection or cursor range.
+   * @returns Quick fixes with nearest named color replacements.
+   */
   provideCodeActions(
     document: vscode.TextDocument,
     range: vscode.Range | vscode.Selection,
@@ -349,21 +392,40 @@ class MonoGameColorCodeActionProvider implements vscode.CodeActionProvider {
   }
 }
 
+/**
+ * Activate the MonoGame Color Preview extension and register providers/commands.
+ * @param context VS Code extension context.
+ */
 export function activate(context: vscode.ExtensionContext) {
   console.log('MonoGame Color Preview is now active');
 
   let enabled = true;
   const decorationTypeMap = new Map<string, vscode.TextEditorDecorationType>();
 
+  /**
+   * Read the extension configuration section.
+   * @returns Extension configuration object.
+   */
   function getConfig() {
     return vscode.workspace.getConfiguration('monogameColorPreview');
   }
 
+  /**
+   * Dispose all active decorations and clear the cache.
+   */
   function clearDecorations() {
     decorationTypeMap.forEach((decorationType) => decorationType.dispose());
     decorationTypeMap.clear();
   }
 
+  /**
+   * Build a decoration type for the given color and configured marker style.
+   * @param color Hex color string.
+   * @param r Red channel.
+   * @param g Green channel.
+   * @param b Blue channel.
+   * @returns Created text editor decoration type.
+   */
   function createDecorationType(color: string, r: number, g: number, b: number): vscode.TextEditorDecorationType {
     const config = getConfig();
     const style = config.get<string>('markerStyle', 'square');
@@ -397,6 +459,10 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
 
+  /**
+   * Compute and apply color decorations for the given editor.
+   * @param editor Target text editor.
+   */
   function updateDecorations(editor: vscode.TextEditor) {
     if (!enabled) {
       clearDecorations();
@@ -505,6 +571,9 @@ export function activate(context: vscode.ExtensionContext) {
   }
 }
 
+/**
+ * Deactivate the extension. Cleanup is handled through disposables.
+ */
 export function deactivate() {
   // Cleanup handled by subscriptions
 }
