@@ -1,5 +1,7 @@
 # MonoGame Color Preview
 
+![MonoGame Color Preview logo](images/icon.png)
+
 A VS Code extension that displays inline color previews for MonoGame/XNA `Color` constructors in C# files.
 
 ## Features
