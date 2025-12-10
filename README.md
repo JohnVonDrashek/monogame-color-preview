@@ -52,6 +52,17 @@ var premult = Color.FromNonPremultiplied(255, 0, 0, 128);
 - The extension lists the nearest MonoGame named colors, limited by `suggestionCount` and `suggestionMaxDistance`.
 - Picking a suggestion replaces the constructor with `Color.SomeName`.
 
+**Example**
+
+```csharp
+// In your code
+var accent = new Color(255, 215, 0);
+
+// Quick Fix suggestions
+// - Replace with Color.Gold (255, 215, 0) — distance: 0.0 (preferred)
+// - Replace with Color.Yellow (255, 255, 0) — distance: 40.0
+```
+
 ## Development
 
 ### Prerequisites
