@@ -7,6 +7,7 @@ A VS Code extension that displays inline color previews for MonoGame/XNA `Color`
 - **RGB Constructor Detection**: Recognizes `new Color(r, g, b)` and `new Color(r, g, b, a)` patterns
 - **Named Color Support**: Highlights all 140+ standard XNA/MonoGame named colors (e.g., `Color.CornflowerBlue`)
 - **FromNonPremultiplied Support**: Detects `Color.FromNonPremultiplied(r, g, b, a)` calls
+- **Quick Fix Suggestions**: Suggests nearest named colors for `new Color(...)` via the lightbulb/Quick Fix menu
 - **Multiple Display Styles**: Choose between square swatch, underline, or background highlight
 
 ## Preview Styles
@@ -23,6 +24,8 @@ A VS Code extension that displays inline color previews for MonoGame/XNA `Color`
 |---------|---------|-------------|
 | `monogameColorPreview.enabled` | `true` | Enable or disable color previews |
 | `monogameColorPreview.markerStyle` | `"square"` | Style of the preview marker |
+| `monogameColorPreview.suggestionCount` | `3` | Number of nearest named color suggestions to show |
+| `monogameColorPreview.suggestionMaxDistance` | `100` | Maximum color distance allowed for suggestions |
 
 ## Commands
 
@@ -42,6 +45,12 @@ var highlight = Color.Gold;
 // FromNonPremultiplied
 var premult = Color.FromNonPremultiplied(255, 0, 0, 128);
 ```
+
+## Color Name Suggestions (Quick Fix)
+
+- Place the cursor inside a `new Color(r, g, b[, a])` call and open Quick Fix (`Cmd/Ctrl+.` or click the lightbulb).
+- The extension lists the nearest MonoGame named colors, limited by `suggestionCount` and `suggestionMaxDistance`.
+- Picking a suggestion replaces the constructor with `Color.SomeName`.
 
 ## Development
 
