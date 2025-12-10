@@ -1,0 +1,76 @@
+{
+  "name": "monogame-color-preview",
+  "displayName": "MonoGame Color Preview",
+  "description": "Inline color previews for MonoGame/XNA Color constructors in C#",
+  "version": "0.3.0",
+  "publisher": "csharp-forge",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "activationEvents": [
+    "onLanguage:csharp"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "MonoGame Color Preview",
+      "properties": {
+        "monogameColorPreview.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable color preview decorations"
+        },
+        "monogameColorPreview.markerStyle": {
+          "type": "string",
+          "default": "square",
+          "enum": ["square", "underline", "background"],
+          "enumDescriptions": [
+            "Show a small colored square before the color constructor",
+            "Underline the color constructor with the color",
+            "Highlight the background of the color constructor"
+          ],
+          "description": "Style of the color preview marker"
+        },
+        "monogameColorPreview.suggestionCount": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Number of nearest color suggestions to show in Quick Fix menu"
+        },
+        "monogameColorPreview.suggestionMaxDistance": {
+          "type": "number",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 442,
+          "description": "Maximum color distance for suggestions (442 = max possible RGB distance)"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "monogameColorPreview.toggle",
+        "title": "Toggle MonoGame Color Preview"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0"
+  }
+}
